@@ -28,6 +28,8 @@ from .settings import SkillSettingsDownloader
 from .skill_loader import SkillLoader
 from .skill_updater import SkillUpdater
 
+from lingua_franca import load_language, set_default_lang
+
 SKILL_MAIN_MODULE = '__init__.py'
 
 
@@ -139,6 +141,10 @@ class SkillManager(Thread):
         self.skill_updater = SkillUpdater()
         self._define_message_bus_events()
         self.daemon = True
+
+        self.lang_code = self.config.get("lang")
+        load_language(self.lang_code)
+        set_default_lang(self.lang_code)
 
     def _define_message_bus_events(self):
         """Define message bus events with handlers defined in this class."""
