@@ -32,7 +32,8 @@ from difflib import SequenceMatcher
 import lingua_franca.parse
 from lingua_franca import get_default_lang, get_primary_lang_code
 from lingua_franca.parse import extract_number, extract_numbers, \
-        extract_datetime, extract_duration, get_gender, normalize
+    extract_duration, get_gender, normalize
+from lingua_franca.parse import extract_datetime as lf_extract_datetime
 
 from .time import now_local
 from .log import LOG
@@ -90,3 +91,64 @@ def match_one(query, choices):
         return (choices[best[0]], best[1])
     else:
         return best
+
+# TODO this is a wrapper. If Lingua Franca comes to support rich config via
+# getters and setters, it should probably be removed in favor of setting
+# the user's time zone via the setter. See Lingua Franca #128
+
+
+def extract_datetime(text,
+                     anchorDate=None,
+                     lang=get_default_lang(),
+                     default_time=None):
+    """Extracts date and time information from a sentence.
+
+    Parses many of the common ways that humans express dates and times,
+    including relative dates like "5 days from today", "tomorrow', and
+    "Tuesday".
+
+    Vague terminology are given arbitrary values, like:
+        - morning = 8 AM
+        - afternoon = 3 PM
+        - evening = 7 PM
+    If a time isn't supplied or implied, the function defaults to 12 AM
+    Args:
+        text (str): the text to be interpreted
+        anchorDate (:obj:`datetime`, optional): the date to be used for
+            relative dating (for example, what does "tomorrow" mean?).
+            Defaults to the current local date/time.
+        lang (str): the BCP-47 code for the language to use, None uses default
+        default_time (datetime.time): time to use if none was found in
+            the input string.
+    Returns:
+        [:obj:`datetime`, :obj:`str`]: 'datetime' is the extracted date
+            as a datetime object in the user's local timezone.
+            'leftover_string' is the original phrase with all date and time
+            related keywords stripped out. See examples for further
+            clarification
+            Returns 'None' if no date or time related text is found.
+    Examples:
+        >>> extract_datetime(
+        ... "What is the weather like the day after tomorrow?",
+        ... datetime(2017, 06, 30, 00, 00)
+        ... )
+        [datetime.datetime(2017, 7, 2, 0, 0), 'what is weather like']
+        >>> extract_datetime(
+        ... "Set up an appointment 2 weeks from Sunday at 5 pm",
+        ... datetime(2016, 02, 19, 00, 00)
+        ... )
+        [datetime.datetime(2016, 3, 6, 17, 0), 'set up appointment']
+        >>> extract_datetime(
+        ... "Set up an appointment",
+        ... datetime(2016, 02, 19, 00, 00)
+        ... )
+        None
+    """
+
+    if lang is None:
+        return lf_extract_datetime(text, anchorDate or now_local(),
+                                   default_time=default_time)
+    else:
+        return lf_extract_datetime(text, anchorDate or now_local(),
+                                   lang=lang,
+                                   default_time=default_time)
