@@ -28,6 +28,7 @@ The module does implement some useful functions like basic fuzzy matchin.
 """
 
 from difflib import SequenceMatcher
+from warnings import warn
 
 import lingua_franca.parse
 from lingua_franca import get_default_lang, get_primary_lang_code
@@ -98,7 +99,7 @@ def match_one(query, choices):
 
 
 def extract_datetime(text,
-                     anchorDate=None,
+                     anchorDate=now_local(),
                      lang=get_default_lang(),
                      default_time=None):
     """Extracts date and time information from a sentence.
@@ -144,11 +145,10 @@ def extract_datetime(text,
         ... )
         None
     """
-
-    if lang is None:
-        return lf_extract_datetime(text, anchorDate or now_local(),
-                                   default_time=default_time)
-    else:
-        return lf_extract_datetime(text, anchorDate or now_local(),
-                                   lang=lang,
-                                   default_time=default_time)
+    if anchorDate is None:
+        warn(DeprecationWarning("extract_datetime(anchorDate==None) is "
+                                "deprecated. This parameter can be omitted."))
+    found_date = lf_extract_datetime(text, anchorDate or now_local(),
+                                     lang=lang,  # or get_default_lang(),
+                                     default_time=default_time)
+    return found_date
