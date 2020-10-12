@@ -510,8 +510,11 @@ if ! grep -q "$TOP" $VENV_PATH_FILE ; then
 ' "$VENV_PATH_FILE"
 fi
 
+# TODO remove --force-reinstall
+# before actual LF integration - here to force git repo to refresh
+
 # install required python modules
-if ! pip install -r requirements/requirements.txt ; then
+if ! pip install --force-reinstall -r requirements/requirements.txt ; then
     echo 'Warning: Failed to install required dependencies. Continue? y/N'
     read -n1 continue
     if [[ $continue != 'y' ]] ; then
