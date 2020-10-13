@@ -148,7 +148,8 @@ def extract_datetime(text,
     if anchorDate is None:
         warn(DeprecationWarning("extract_datetime(anchorDate==None) is "
                                 "deprecated. This parameter can be omitted."))
-    found_date = lf_extract_datetime(text, anchorDate or now_local(),
-                                     lang=lang,  # or get_default_lang(),
+        anchorDate = now_local()
+    found_date = lf_extract_datetime(text, anchorDate,
+                                     lang=lang,
                                      default_time=default_time)
     return found_date
