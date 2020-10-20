@@ -34,6 +34,7 @@ from mycroft.util.format import date_time_format
 from mycroft.util.format import join_list
 
 from lingua_franca import load_language, unload_language, set_default_lang
+from lingua_franca.internal import UnsupportedLanguageError
 
 DEFAULT_LANG = 'en-us'
 
@@ -386,12 +387,6 @@ class TestNiceDateFormat(unittest.TestCase):
                                  nice_date(dt, lang=lang, now=now))
                 i = i + 1
 
-        # test fall back to english
-        dt = datetime.datetime(2018, 2, 4, 0, 2, 3)
-        self.assertEqual(nice_date(
-            dt, lang='invalid', now=datetime.datetime(2018, 2, 4, 0, 2, 3)),
-            'today')
-
         # test all days in a year for all languages,
         # that some output is produced
         for lang in self.test_config:
@@ -623,6 +618,13 @@ class TestNiceDurationFuncs(unittest.TestCase):
                                           datetime.datetime(1, 1, 1),
                                           resolution=TimeResolution.YEARS,
                                           speech=False), "0y")
+
+
+class TestErrorHandling(unittest.TestCase):
+    def test_invalid_lang_code(self):
+        dt = datetime.datetime(2018, 2, 4, 0, 2, 3)
+        with self.assertRaises(UnsupportedLanguageError):
+            nice_date(dt, lang='invalid', now=dt)
 
 
 if __name__ == "__main__":
