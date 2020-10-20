@@ -143,7 +143,7 @@ class SkillManager(Thread):
         self._define_message_bus_events()
         self.daemon = True
 
-        self.lang_code = self.config.get("lang")
+        self.lang_code = self.config.get("lang", 'en-us')
         load_languages([self.lang_code, 'en-us'])
 
     def _define_message_bus_events(self):
