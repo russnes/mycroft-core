@@ -100,7 +100,7 @@ def match_one(query, choices):
 
 def extract_datetime(text,
                      anchorDate=now_local(),
-                     lang=get_default_lang(),
+                     lang=get_default_lang() or 'en-us',
                      default_time=None):
     """Extracts date and time information from a sentence.
 

@@ -29,6 +29,7 @@ import warnings
 from calendar import leapdays
 from enum import Enum
 
+from lingua_franca import get_default_lang
 # These are the main functions we are using lingua franca to provide
 from lingua_franca.format import (NUMBER_TUPLE, DateTimeFormat, join_list,
                                   date_time_format, expand_options,
@@ -286,8 +287,9 @@ def _duration_handler(time1, lang=None, speech=True, *, time2=None,
     return out
 
 
-def nice_duration(duration, lang=None, speech=True, use_years=True,
-                  clock=False, resolution=TimeResolution.SECONDS):
+def nice_duration(duration, lang=get_default_lang() or 'en-us',
+                  speech=True, use_years=True, clock=False,
+                  resolution=TimeResolution.SECONDS):
     """ Convert duration in seconds to a nice spoken timespan
 
     Accepts:
@@ -328,8 +330,9 @@ def nice_duration(duration, lang=None, speech=True, use_years=True,
                              clock=clock)
 
 
-def nice_duration_dt(date1, date2, lang=None, speech=True, use_years=True,
-                     clock=False, resolution=TimeResolution.SECONDS):
+def nice_duration_dt(date1, date2, lang=get_default_lang() or 'en-us',
+                     speech=True, use_years=True, clock=False,
+                     resolution=TimeResolution.SECONDS):
     """ Convert duration between datetimes to a nice spoken timespan
 
     Accepts:
