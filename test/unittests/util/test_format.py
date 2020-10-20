@@ -33,6 +33,10 @@ from mycroft.util.format import pronounce_number
 from mycroft.util.format import date_time_format
 from mycroft.util.format import join_list
 
+from lingua_franca import load_language, unload_language, set_default_lang
+
+DEFAULT_LANG = 'en-us'
+
 NUMBERS_FIXTURE_EN = {
     1.435634: '1.436',
     2: '2',
@@ -364,6 +368,8 @@ class TestNiceDateFormat(unittest.TestCase):
 
     def test_nice_date(self):
         for lang in self.test_config:
+            load_language(lang)
+            set_default_lang(lang)
             i = 1
             while (self.test_config[lang].get('test_nice_date') and
                    self.test_config[lang]['test_nice_date'].get(str(i))):
@@ -389,12 +395,17 @@ class TestNiceDateFormat(unittest.TestCase):
         # test all days in a year for all languages,
         # that some output is produced
         for lang in self.test_config:
+            load_language(lang)
+            set_default_lang(lang)
             for dt in (datetime.datetime(2017, 12, 30, 0, 2, 3) +
                        datetime.timedelta(n) for n in range(368)):
                 self.assertTrue(len(nice_date(dt, lang=lang)) > 0)
+        set_default_lang(DEFAULT_LANG)
 
     def test_nice_date_time(self):
         for lang in self.test_config:
+            load_language(lang)
+            set_default_lang(lang)
             i = 1
             while (self.test_config[lang].get('test_nice_date_time') and
                    self.test_config[lang]['test_nice_date_time'].get(str(i))):
@@ -414,9 +425,12 @@ class TestNiceDateFormat(unittest.TestCase):
                         use_24hour=ast.literal_eval(p['use_24hour']),
                         use_ampm=ast.literal_eval(p['use_ampm'])))
                 i = i + 1
+        set_default_lang(DEFAULT_LANG)
 
     def test_nice_year(self):
         for lang in self.test_config:
+            load_language(lang)
+            set_default_lang(lang)
             i = 1
             while (self.test_config[lang].get('test_nice_year') and
                    self.test_config[lang]['test_nice_year'].get(str(i))):
@@ -433,13 +447,15 @@ class TestNiceDateFormat(unittest.TestCase):
         # Test all years from 0 to 9999 for all languages,
         # that some output is produced
         for lang in self.test_config:
+            load_language(lang)
+            set_default_lang(lang)
             print("Test all years in " + lang)
             for i in range(1, 9999):
                 dt = datetime.datetime(i, 1, 31, 13, 2, 3)
                 self.assertTrue(len(nice_year(dt, lang=lang)) > 0)
                 # Looking through the date sequence can be helpful
-
-#                print(nice_year(dt, lang=lang))
+                # print(nice_year(dt, lang=lang))
+        set_default_lang(DEFAULT_LANG)
 
     def test_join(self):
         self.assertEqual(join_list(None, "and"), "")
