@@ -369,7 +369,6 @@ class TestNiceDateFormat(unittest.TestCase):
 
     def test_nice_date(self):
         for lang in self.test_config:
-            load_language(lang)
             set_default_lang(lang)
             i = 1
             while (self.test_config[lang].get('test_nice_date') and
@@ -390,7 +389,6 @@ class TestNiceDateFormat(unittest.TestCase):
         # test all days in a year for all languages,
         # that some output is produced
         for lang in self.test_config:
-            load_language(lang)
             set_default_lang(lang)
             for dt in (datetime.datetime(2017, 12, 30, 0, 2, 3) +
                        datetime.timedelta(n) for n in range(368)):
@@ -399,7 +397,6 @@ class TestNiceDateFormat(unittest.TestCase):
 
     def test_nice_date_time(self):
         for lang in self.test_config:
-            load_language(lang)
             set_default_lang(lang)
             i = 1
             while (self.test_config[lang].get('test_nice_date_time') and
@@ -424,7 +421,6 @@ class TestNiceDateFormat(unittest.TestCase):
 
     def test_nice_year(self):
         for lang in self.test_config:
-            load_language(lang)
             set_default_lang(lang)
             i = 1
             while (self.test_config[lang].get('test_nice_year') and
@@ -442,7 +438,6 @@ class TestNiceDateFormat(unittest.TestCase):
         # Test all years from 0 to 9999 for all languages,
         # that some output is produced
         for lang in self.test_config:
-            load_language(lang)
             set_default_lang(lang)
             print("Test all years in " + lang)
             for i in range(1, 9999):
