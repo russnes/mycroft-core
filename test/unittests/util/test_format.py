@@ -100,9 +100,10 @@ class TestNiceNumberFormat(unittest.TestCase):
         """ An unknown / unhandled language should return the string
             representation of the input number.
         """
-        self.assertEqual(nice_number(5.5, lang='as-fd'), '5.5',
-                         'should format 5.5 as 5.5 not {}'.format(
-                             nice_number(5.5, lang='as-df')))
+        with self.assertWarns(Warning):
+            self.assertEqual(nice_number(5.5, lang='as-fd'), '5.5',
+                            'should format 5.5 as 5.5 not {}'.format(
+                                nice_number(5.5, lang='as-df')))
 
 
 class TestPronounceNumber(unittest.TestCase):
