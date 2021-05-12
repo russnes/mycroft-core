@@ -438,7 +438,7 @@ function install_venv() {
     [[ -x ${VIRTUALENV_ROOT}/bin/pip ]]
 }
 
-install_deps
+#install_deps
 
 # Configure to use the standard commit template for
 # this repo only.
