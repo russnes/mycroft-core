@@ -263,14 +263,13 @@ fi" > ~/.profile_mycroft
         echo 'permission and might ask you for a password...'
         setup_user=$USER
         setup_group=$(id -gn $USER)
-        $SUDO mkdir -p /opt/mycroft/skills
-        $SUDO chown -R ${setup_user}:${setup_group} /opt/mycroft
+        mkdir -p $HOME/opt/mycroft/skills
         echo 'Created!'
     fi
     if [[ ! -d skills ]] ; then
-        ln -s /opt/mycroft/skills skills
+        ln -s $HOME/opt/mycroft/skills skills
         echo "For convenience, a soft link has been created called 'skills' which leads"
-        echo 'to /opt/mycroft/skills.'
+        echo "to $HOME/opt/mycroft/skills."
     fi
 
     # Add PEP8 pre-commit hook
@@ -582,13 +581,13 @@ chmod +x bin/mycroft-skill-testrunner
 chmod +x bin/mycroft-speak
 
 # create and set permissions for logging
-if [[ ! -w /var/log/mycroft/ ]] ; then
+MYCROFT_LOG_DIR=$HOME/var/log/mycroft
+if [[ ! -w $MYCROFT_LOG_DIR ]] ; then
     # Creating and setting permissions
-    echo 'Creating /var/log/mycroft/ directory'
-    if [[ ! -d /var/log/mycroft/ ]] ; then
-        $SUDO mkdir /var/log/mycroft/
+    echo "Creating $MYCROFT_LOG_DIR directory"
+    if [[ ! -d $MYCROFT_LOG_DIR ]] ; then
+        mkdir $MYCROFT_LOG_DIR -p
     fi
-    $SUDO chmod 777 /var/log/mycroft/
 fi
 
 #Store a fingerprint of setup
